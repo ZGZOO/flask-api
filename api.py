@@ -20,7 +20,7 @@ class TodoNoteModel(db.Model):
 
 	# items here too?
 	def __repr__(self):
-		return f"Todo Note - {title}"
+		return f"Todo Note - {self.title}"
 
 
 class TodoItemModel(db.Model):
@@ -31,7 +31,7 @@ class TodoItemModel(db.Model):
 
 	# note_id here too?
 	def __repr__(self):
-		return f"Todo Item - {task} - {completed}"
+		return f"Todo Item - {self.id} - {self.task} - {self.completed}"
 
 
 @app.cli.command("init_db")
@@ -198,8 +198,7 @@ class TodoItems(Resource):
 	@marshal_with(todo_item_fields)
 	def get(self, todo_note_id):
 		note = TodoNoteModel.query.filter_by(id=todo_note_id).first_or_404(description='Todo Note with id={} is not available'.format(todo_note_id))
-		items = note.items
-		return note, 200
+		return note.items.all(), 200
 
 
 	# create a new Todo Item for a specific note based on note_id
